@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tech_store/features/productslist/data/datasources/products_list_api.dart';
+import 'package:tech_store/features/products-details/data/datasources/remote/remote_api_impl.dart';
 import 'package:tech_store/features/productslist/presentation/views/product_list.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
-  final productService = ProductService();
+  final productService = ProductsDetailRemoteDataImpl();
 
   try {
-    final products = await productService.fetchAllProducts(1);
-    for (var product in products) {
-      print('${product.name} - ${product.posterImage ?? "No image"}');
-      print("✅ ${product.name} - ${product.startingPrice}");
+    final products = await productService.getProductDetail(21);
 
-    }
+      print('❌❌❌${products.name} - ❌❌❌${products.poster_image?? "No image"}');
+
+
+
   } catch (e) {
     print("❌ Error: $e");
   }

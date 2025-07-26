@@ -1,4 +1,5 @@
 import 'package:tech_store/features/productslist/data/datasources/products_list_api.dart';
+import 'package:tech_store/features/productslist/domain/entities/brand.dart';
 import 'package:tech_store/features/productslist/domain/entities/category_count.dart';
 import 'package:tech_store/features/productslist/domain/entities/price_range.dart';
 import 'package:tech_store/features/productslist/data/models/price_count_model.dart';
@@ -11,8 +12,8 @@ class ProductRepositoryImpl implements ProductsRepository {
   ProductRepositoryImpl(this.service);
 
   @override
-  Future<List<Product>> fetchProducts({int page = 1}) async {
-    final models = await service.fetchAllProducts(page);
+  Future<List<Product>> fetchProducts({int? page = 1, Map<String, dynamic>? filters,Map<String, dynamic>? sort}) async {
+    final models = await service.fetchAllProducts(page!, filters: filters,sort: sort);
     return models.map((model) => model.toEntity()).toList();
   }
 
@@ -27,5 +28,11 @@ class ProductRepositoryImpl implements ProductsRepository {
     final models =await service.fetchProductCategoryCount();
     return models.map((model) => model.toEntity()).toList();// Implement this as well if needed
 
+  }
+
+  @override
+  Future<List<Brand>> fetchBrands({int? page = 1})  async{
+   final models = await service.fetchBrands(page: page);
+   return models.map((model)=>model.toEntity()).toList();
   }
 }

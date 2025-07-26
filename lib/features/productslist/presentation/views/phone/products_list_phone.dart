@@ -60,187 +60,234 @@ setState(() {
     final colortogle=ref.watch(togglecolor);
     final pricetogle=ref.watch(toggleprice);
     final categorytogle=ref.watch(togglcategory);
+    ref.watch(filtersNumberProvider);
+
+
     final priceRanges = ref.watch(priceRangesProvider);
      final categoryCounts = ref.watch(categoryCountsProvider);
 
 
     final List<DropdownMenuItem<String>> items = [
       const DropdownMenuItem(value: 'All', child: Text('All')),
-      const DropdownMenuItem(value: 'Newest', child: Text('Newest')),
-      const DropdownMenuItem(value: 'Price: Low to High', child: Text('Price: Low to High')),
-      const DropdownMenuItem(value: 'Price: High to Low', child: Text('Price: High to Low')),
+      const DropdownMenuItem(value: 'created_at', child: Text('Newest')),
+      const DropdownMenuItem(value: 'starting_price', child: Text('Price: Low to High')),
+      const DropdownMenuItem(value: '-starting_price', child: Text('Price: High to Low')),
+      const DropdownMenuItem(value: 'average_rating', child: Text('Rating: High to Low')),
+      const DropdownMenuItem(value: '-average_rating', child: Text('Rating: Low to High')),
     ];
 
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: Drawer(
-        child: Padding(padding: EdgeInsets.only(left: 10,right: 10,top: 50),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(
-                  width: 1,
-                  color: AppColors.labelColor
-                )),
-      ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Filter By',style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black
-                ),),
-                IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.close,size: 30,)),
-              ],
-            ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Category',style: TextStyle(
-                    fontSize: 18,
+        child: SingleChildScrollView(
+          child: Padding(padding: EdgeInsets.only(left: 10,right: 10,top: 50),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(
+                    width: 1,
+                    color: AppColors.labelColor
+                  )),
+                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Filter By',style: TextStyle(
+                    fontSize: 24,
                     fontWeight: FontWeight.w600,
                     color: Colors.black
-
-
-                ),),
-
-                IconButton(onPressed: (){
-                  ref.read(togglcategory.notifier).state=!categorytogle;
-                },icon: Icon(!categorytogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
-              ],
-            ),
-            Visibility(
-              visible: categorytogle,
-              child: Column(
-                children: List.generate(categoryCounts.length, (index) {
-
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 18,bottom: 10),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(categoryCounts[index].name, style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black
-                            )),
-                            Text(categoryCounts[index].product_count.toString(), style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black
-                            )),
-                          ],
+                  ),),
+                  IconButton(onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.close,size: 30,)),
+                ],
+              ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Category',style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black
+          
+          
+                  ),),
+          
+                  IconButton(onPressed: (){
+                    ref.read(togglcategory.notifier).state=!categorytogle;
+                  },icon: Icon(!categorytogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
+                ],
+              ),
+              Visibility(
+                visible: categorytogle,
+                child: Column(
+                  children: List.generate(categoryCounts.length, (index) {
+          
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 18,bottom: 10),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: (){
+                            if(ref.read(categoryFilterProvider.notifier).state==''
+                            ){ref.read(filtersNumberProvider.notifier).state++;}
+                            ref.read(categoryFilterProvider.notifier).state=categoryCounts[index].name;
+          
+                            print(ref.read(filtersNumberProvider.notifier).state);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(categoryCounts[index].name, style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black
+                              )),
+                              Text(categoryCounts[index].product_count.toString(), style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black
+                              )),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
-            ),
-
-            SizedBox(height: 5,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Price',style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black
-
-
-                ),),
-
-                IconButton(onPressed: (){
-                  ref.read(toggleprice.notifier).state=!pricetogle;
-                },icon: Icon(!pricetogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
-              ],
-            ),
-
-            Visibility(
-              visible: pricetogle,
-              child: Column(
-                children: List.generate(priceRanges.length, (index) {
-                  final formatPrice = ref.read(priceFormatterProvider);
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 18,bottom: 10),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: (){},
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(formatPrice(priceRanges[index].range), style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black
-                            )),
-                            Text(priceRanges[index].count.toString(), style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black
-                            )),
-                          ],
+          
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Price',style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black
+          
+          
+                  ),),
+          
+                  IconButton(onPressed: (){
+                    ref.read(toggleprice.notifier).state=!pricetogle;
+                  },icon: Icon(!pricetogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
+                ],
+              ),
+          
+              Visibility(
+                visible: pricetogle,
+                child: Column(
+                  children: List.generate(priceRanges.length, (index) {
+                    final formatPrice = ref.read(priceFormatterProvider);
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 18,bottom: 10),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: (){
+                            if(ref.read(priceFiltersProvider.notifier).state==''
+                            ){ref.read(filtersNumberProvider.notifier).state++;}
+                            ref.read(priceFiltersProvider.notifier).state=priceRanges[index].range;
+          
+                           print(ref.read(priceFiltersProvider.notifier).state);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(formatPrice(priceRanges[index].range), style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black
+                              )),
+                              Text(priceRanges[index].count.toString(), style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black
+                              )),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
+                ),
               ),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Color',style: TextStyle(
-                    fontSize: 18,
+          
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Color',style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black
+          
+          
+                  ),),
+                  IconButton(onPressed: (){
+                    ref.read(togglecolor.notifier).state=!colortogle;
+                  },icon: Icon(!colortogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
+                ],
+              ),
+          
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Brands',style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black
+          
+          
+                  ),),
+          
+                  IconButton(onPressed: (){
+                    ref.read(togglebrand.notifier).state=!brandtogle;
+                  },icon: Icon(!brandtogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
+                ],
+              ),
+              SizedBox(height: 5,),
+               Padding(
+                 padding: const EdgeInsets.only(left: 20.0,right: 20,
+                 bottom: 30),
+                 child: ElevatedButton(onPressed: (){
+                   ref.read(productViewModelProvider.notifier).applyFilters({
+          
+                     'category': ref.read(categoryFilterProvider),
+                     'price_range': ref.read(priceFiltersProvider),
+                   }
+                       , {
+                       'ordering': ref.read(productFilterProvider),
+                       }
+          
+                   );
+          
+                 }, child: Text('Apply Filters (${ref.read(filtersNumberProvider.notifier).state})',style: TextStyle(
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black
-
-
-                ),),
-
-                IconButton(onPressed: (){
-                  ref.read(togglecolor.notifier).state=!colortogle;
-                },icon: Icon(!colortogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
-              ],
-            ),
-            SizedBox(height: 5,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Brands',style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black
-
-
-                ),),
-
-                IconButton(onPressed: (){
-                  ref.read(togglebrand.notifier).state=!brandtogle;
-                },icon: Icon(!brandtogle ? Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined,color: Colors.black,)),
-              ],
-            ),
-            SizedBox(height: 5,),
-            //GET http://localhost:8000/api/category-product-count/
-            // ###
-            // GET http://localhost:8000/api/products-price-count/?ranges=0-50,51-100,101-200
-
-          ],
-        ),
+                    color: Colors.white
+                  )),
+          
+                 style: ElevatedButton.styleFrom(
+          
+                   backgroundColor: AppColors.blueComponents,
+                   minimumSize: Size(double.infinity, 50)
+                 ),
+                 ),
+               ),
+              //GET http://localhost:8000/api/category-product-count/
+              // ###
+              // GET http://localhost:8000/api/products-price-count/?ranges=0-50,51-100,101-200
+          
+            ],
+          ),
+          ),
         )
       ),
 
@@ -437,6 +484,7 @@ setState(() {
                                         blurRadius: 2,
                                         offset: const Offset(0, 1),
                                       ),
+
                                     ],
                                   ),
                                   child: DropdownButtonHideUnderline(
@@ -461,6 +509,14 @@ setState(() {
                                               items: items,
                                               onChanged: (value) {
                                                 selectedNotifier.state = value!;
+                                                print("thestate"+selectedNotifier.state);
+                                                ref.read(productViewModelProvider.notifier).applyFilters({
+                                                  'category': ref.read(categoryFilterProvider),
+                                                  'price_range': ref.read(priceFiltersProvider),
+                                                }
+                                                  , {
+                                                    'ordering':"$value",
+                                                  });
                                               },
                                               style: const TextStyle(
                                                 fontSize: 15,
@@ -517,6 +573,7 @@ setState(() {
 
                               final product = products[index];
                               return ProductCard(
+                                key: ValueKey(product.id),
                                 id: product.id ?? 0,
                                 name: product.name ?? '',
                                 price: product.startingPrice ?? 0,

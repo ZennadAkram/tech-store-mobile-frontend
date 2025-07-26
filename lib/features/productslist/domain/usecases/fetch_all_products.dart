@@ -8,7 +8,7 @@ class FetchAllProducts {
 
   FetchAllProducts(this.repository);
 
-  Future<List<Product>> call({int page = 1}) {
-    return repository.fetchProducts(page: page);
+  Future<List<Product>> call({int page = 1, Map<String, dynamic>? filters,Map<String, dynamic>? sort}) {
+    return repository.fetchProducts(page: page, filters: filters,sort: sort);
   }
 }

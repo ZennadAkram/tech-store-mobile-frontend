@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:tech_store/core/network/public_dio.dart';
+import 'package:tech_store/features/productslist/data/models/brand_model.dart';
 import 'package:tech_store/features/productslist/data/models/category_count_model.dart';
 import 'package:tech_store/features/productslist/data/models/price_count_model.dart';
 import 'package:tech_store/features/productslist/data/models/product_model.dart';
@@ -7,11 +8,28 @@ import 'package:tech_store/features/productslist/data/models/product_model.dart'
 class ProductService {
   final Dio _dio = PublicDio.dio;
 
-  Future<List<ProductModel>> fetchAllProducts(int page) async {
+Future<List<BrandModel>> fetchBrands({int? page}) async {
+  try{
+    final response = await _dio.get('/ListBrand/');
+    final List data = response.data['results'];
+    return data.map((json) => BrandModel.fromJson(json)).toList();
+  }catch(e){
+    print("🔴 General error: $e");
+    throw Exception("Unknown error occurred");
+  }
+}
+
+  Future<List<ProductModel>> fetchAllProducts(int? page, {Map<String, dynamic>? filters,Map<String, dynamic>? sort}) async {
     try {
-      final response = await _dio.get('/products/', queryParameters: {
-        'page': page,
-      });
+      final response = await _dio.get(
+        '/products/',
+        queryParameters: {
+          'page': page,
+          if (filters != null) ...filters,
+          if (sort != null) ...sort, // Spread the filters into the query
+        },
+      );
+
 
       final List data = response.data['results'] ?? response.data;
 

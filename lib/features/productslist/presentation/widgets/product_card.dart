@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tech_store/Core/constants/app_colors.dart';
 
@@ -35,10 +36,27 @@ class ProductCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(imageUrl, height: 200),
+            SizedBox(
+              height: 200,
+              child: imageUrl.isNotEmpty
+                  ? CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) {
+                  print('Image load failed: $error');
+                  return Icon(Icons.broken_image);
+                },
+                fadeInDuration: Duration(milliseconds: 200),
+                fadeOutDuration: Duration(milliseconds: 200),
+              )
+
+                  : Center(child: Icon(Icons.image_not_supported, size: 60)),
+            ),
+
             SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // Stars
                 for (int i = 1; i <= 5; i++)
