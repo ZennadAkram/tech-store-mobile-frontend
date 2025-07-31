@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:tech_store/Core/network/auth_interceptor.dart';
 
 class PublicDio {
   static final Dio dio = Dio(
@@ -12,5 +13,6 @@ class PublicDio {
         'Accept': 'application/json',
       },
     ),
-  )..interceptors.add(LogInterceptor(responseBody: true));
+  )..interceptors.add(LogInterceptor(responseBody: true))  ..interceptors.add(AuthInterceptor());
+
 }

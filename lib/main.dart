@@ -1,24 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tech_store/Core/network/private_dio.dart';
+import 'package:tech_store/Core/network/public_dio.dart';
+import 'package:tech_store/Core/network/token_storage.dart';
+import 'package:tech_store/features/auth/presentation/view/screen/auth_screen.dart';
 import 'package:tech_store/features/products-details/data/datasources/remote/remote_api_impl.dart';
+import 'package:tech_store/features/products-details/presentation/view/product_detail_screen.dart';
 import 'package:tech_store/features/productslist/presentation/views/product_list.dart';
 
-Future<void> main() async {
-  await dotenv.load(fileName: ".env");
-  final productService = ProductsDetailRemoteDataImpl();
 
+Future<void> testLogin() async {
   try {
-    final products = await productService.getProductDetail(21);
+    final response = await PublicDio.dio.post(
+      '/login/',
+      data: {
+        "username": "krimo",
+        "password": "12345"
+      },
+    );
 
-      print('❌❌❌${products.name} - ❌❌❌${products.poster_image?? "No image"}');
+    final accessToken = response.data['access'];
+    final refreshToken = response.data['refresh'];
 
 
+    await TokenStorage.saveTokens(accessToken, refreshToken);
 
+    print("✅ Login Successful!");
+    print("Access Token: $accessToken");
+    print("Refresh Token: $refreshToken");
+  } catch (e) {
+    print("❌ Login Failed: $e");
+  }
+}
+
+void testPrivateRequest() async {
+  try {
+    final response = await PrivateDio.dio.get('/me/');
+    print("✅ Protected response: ${response.data}");
   } catch (e) {
     print("❌ Error: $e");
   }
-  print(dotenv.env['BASE_URL']); // Should print your URL
+}
+
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+  // final productService = ProductsDetailRemoteDataImpl();
+  //
+  // try {
+  //   final products = await productService.getProductDetail(21);
+  //
+  //     print('❌❌❌${products.name} - ❌❌❌${products.poster_image?? "No image"}');
+  //
+  //
+  //
+  // } catch (e) {
+  //   print("❌ Error: $e");
+  // }
+  // print(dotenv.env['BASE_URL']); // Should print your URL
+
+
 
   runApp(ProviderScope(child: MyApp()));
 }
@@ -52,7 +93,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ProductList(),
+      home:ProductDetailScreen(),
     );
   }
 }

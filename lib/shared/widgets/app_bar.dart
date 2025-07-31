@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+ // ✅ Use this, not Provider
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tech_store/Core/constants/app_colors.dart';
+import 'package:tech_store/shared/providers/appbar_provider.dart';
 
-class AppBarCostume extends StatelessWidget implements PreferredSizeWidget {
+class AppBarCostume extends HookConsumerWidget implements PreferredSizeWidget {
   const AppBarCostume({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(170); // total height
+  Size get preferredSize => const Size.fromHeight(170);
 
   @override
-  Widget build(BuildContext context) {
-    double TextFaildWidth= MediaQuery.of(context).size.width;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userVM = ref.watch(appBarUserProvider);
+
+    // Run once to initialize data
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(appBarUserProvider).initializeData();
+      });
+      return null;
+    }, []);
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Stack(
-      clipBehavior: Clip.none, // allow overflow
+      clipBehavior: Clip.none,
       children: [
-        // 🔵 Bottom full-width container (like the second blue bar)
         Container(
           height: 135,
           width: double.infinity,
@@ -22,150 +36,112 @@ class AppBarCostume extends StatelessWidget implements PreferredSizeWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 42),
             child: Row(
-
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-               crossAxisAlignment: CrossAxisAlignment.center,
-
               children: [
-
-                Padding(
-                  padding: EdgeInsetsGeometry.only(left: 1),
-                  child: Builder(
-                    builder: (context) => IconButton(
-                      padding: EdgeInsets.zero, // ✅ Remove internal padding
-                      icon: const Icon(Icons.menu, size: 35, color: Colors.white),
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                    ),
+                Builder(
+                  builder: (context) => IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: const Icon(Icons.menu, size: 35, color: Colors.white),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
                   ),
                 ),
-
                 Container(
-
-                  width:TextFaildWidth*0.6 ,
+                  width: screenWidth * 0.6,
                   height: 50,
                   child: TextField(
-
                     decoration: InputDecoration(
                       hintText: "Search here",
-                     prefixIcon: Icon(Icons.search_rounded, size: 30, color: AppColors.labelColor,),
+                      prefixIcon: Icon(Icons.search_rounded,
+                          size: 30, color: AppColors.labelColor),
                       hintStyle: TextStyle(
-                      color: AppColors.ChipChoice,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18,
-
-                        
-                      ),
-                      focusColor: Colors.white,
+                          color: AppColors.ChipChoice,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18),
                       focusedBorder: OutlineInputBorder(
-
-                        borderSide: BorderSide(
-                          color: Colors.white
-
-                        ),
-                          borderRadius: BorderRadius.circular(25)
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(25),
                       ),
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.white,
-
-                        ),
-                        borderRadius: BorderRadius.circular(25)
-                      )
-                      
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
                     ),
                   ),
                 ),
-
                 Row(
                   children: [
                     Stack(
                       clipBehavior: Clip.none,
-
                       children: [
                         IconButton(
-                          onPressed: () {
-
-                          },
+                          onPressed: () {},
                           icon: SvgPicture.asset(
                             'assets/icons/cart.svg',
                             width: 32,
                             height: 32,
-                            // Optional, only works if SVG path fill is not hardcoded
                           ),
                         ),
-                        Positioned(
-                             left: 25,
+                        if (userVM.cartCount > 0)
+                          Positioned(
+                            left: 25,
                             top: -1,
                             child: Container(
                               height: 17,
                               width: 17,
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(50)
-                              ),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(50)),
                               child: Center(
-                                child: Text('2',style: TextStyle(
-                                  color: AppColors.blueComponents,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold
-                                ),),
+                                child: Text('${userVM.cartCount}',
+                                    style: TextStyle(
+                                        color: AppColors.blueComponents,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold)),
                               ),
-
-                        )),
-
+                            ),
+                          ),
                       ],
-
                     ),
-                    IconButton(onPressed: (){}, icon: SvgPicture.asset('assets/icons/profileicon.svg',
-                        width: 32,
-                        height: 32))
+                    IconButton(
+                      onPressed: () {},
+                      icon: userVM.user.image == null || userVM.user.isEmpty
+                          ? SvgPicture.asset('assets/icons/profileicon.svg',
+                          width: 32, height: 32)
+                          : ClipOval(
+                          child: Image.network(userVM.user.image!,
+                              width: 32, height: 32)),
+                    )
                   ],
                 ),
-
-
-
-
               ],
             ),
           ),
         ),
-
-        // ⚫️ Black bar background (optional visual base)
         Positioned(
-          top: 0, // shifts upward to create overlap effect
+          top: 0,
           left: 0,
           right: 0,
-          child: Container(
-            height: 50,
-            color: Colors.black,
-          ),
+          child: Container(height: 50, color: Colors.black),
         ),
-
-        // 🔵 Floating rounded icon container
         Positioned(
-          top: 0, // to make it float
+          top: 0,
           left: 30,
           child: Container(
             height: 50,
             width: 100,
             decoration: BoxDecoration(
               color: AppColors.blueComponents,
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(50),
                 topRight: Radius.circular(50),
               ),
             ),
-            child: const Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Icon(
-                Icons.layers_rounded,
-                color: Colors.white,
-                size: 35,
-              ),
+            child: Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Icon(Icons.layers_rounded,
+                  color: Colors.white, size: 35),
             ),
           ),
         ),

@@ -12,6 +12,7 @@ class ProductDetailed{
   Categories category;
   List<Version>? versions;
   double average_rating;
-  ProductDetailed({required this.id, required this.name, required this.poster_image, required this.description, required this.startting_price, required this.brand, required this.category, required this.versions, required this.average_rating});
+  int? stock;
+  ProductDetailed({ this.stock,required this.id, required this.name, required this.poster_image, required this.description, required this.startting_price, required this.brand, required this.category, required this.versions, required this.average_rating});
 
 }

@@ -13,7 +13,8 @@ class ProductDetailModel{
   CategoryModel? category;
   List<VersionModel>? versions;
   double? average_rating;
-  ProductDetailModel({required this.average_rating,required this.id, required this.name, required this.poster_image, required this.description, required this.startting_price, required this.brand, required this.category, required this.versions});
+  int? stock;
+  ProductDetailModel({this.stock,required this.average_rating,required this.id, required this.name, required this.poster_image, required this.description, required this.startting_price, required this.brand, required this.category, required this.versions});
   factory ProductDetailModel.fromJson(Map<String, dynamic> json) {
     return ProductDetailModel(
       id: json['id'],
@@ -25,9 +26,11 @@ class ProductDetailModel{
       category: json['category'] != null ? CategoryModel.fromJson(json['category']) : null,
       versions: json['versions'] != null ? (json['versions'] as List).map((i) => VersionModel.fromJson(i)).toList() : [],
       average_rating: json['average_rating'],
-
-
+      stock: json['stock'],
     );
+
+
+
   }
   ProductDetailed toEntity() {
     return ProductDetailed(
@@ -40,6 +43,10 @@ class ProductDetailModel{
       category: category!.toEntity(),
       versions: versions != null ? versions!.map((i) => i.toEntity()).toList() : [],
       average_rating:average_rating ?? 0,
+      stock: stock,
+
+
+
     );
 
   }

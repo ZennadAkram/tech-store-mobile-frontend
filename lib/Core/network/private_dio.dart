@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'auth_interceptor.dart';
 
 class PrivateDio {
   static final Dio dio = Dio(
     BaseOptions(
-      baseUrl:dotenv.env['BASE_URL'] ?? "", // same base as public
+      baseUrl: dotenv.env['BASE_URL'] ?? "", // This must match the refresh URL base too
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {
@@ -13,8 +14,6 @@ class PrivateDio {
         'Accept': 'application/json',
       },
     ),
-  )..interceptors.addAll([
-    AuthInterceptor(),
-    LogInterceptor(responseBody: true),
-  ]);
+  )..interceptors.add(AuthInterceptor())
+    ..interceptors.add(LogInterceptor(responseBody: true)); // for debugging
 }
