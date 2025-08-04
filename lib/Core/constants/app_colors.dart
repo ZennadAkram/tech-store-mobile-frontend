@@ -12,7 +12,7 @@ class AppColors {
  static Color TextColor=Color(0xFF666666);
  static Color ChipChoice=Color(0xFF838383);
  static Color labelColor=Color(0xFFCACDD8);
-
+static Color textBlue=Color(0xFF232C65);
   // Backgrounds
   static Color SupportBg=Color(0xFF020203);
   static const Color scaffoldBackground = Color(0xFFF5F5F5);

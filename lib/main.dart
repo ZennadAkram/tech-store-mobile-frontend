@@ -4,10 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_store/Core/network/private_dio.dart';
 import 'package:tech_store/Core/network/public_dio.dart';
 import 'package:tech_store/Core/network/token_storage.dart';
-import 'package:tech_store/features/auth/presentation/view/screen/auth_screen.dart';
-import 'package:tech_store/features/products-details/data/datasources/remote/remote_api_impl.dart';
-import 'package:tech_store/features/products-details/presentation/view/product_detail_screen.dart';
-import 'package:tech_store/features/productslist/presentation/views/product_list.dart';
+import 'package:tech_store/features/cart/presentation/view/cart_screen.dart';
 
 
 Future<void> testLogin() async {
@@ -93,7 +90,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:ProductDetailScreen(),
+      home:CartScreen(),
     );
   }
 }
