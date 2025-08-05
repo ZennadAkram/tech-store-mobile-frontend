@@ -24,5 +24,10 @@ class CartRepositoryImpl implements CartRepository{
     return await api.deleteCart(id);
   }
 
+  @override
+  Future<void> clearCart() async{
+    await api.clearCart();
+  }
+
   }
 

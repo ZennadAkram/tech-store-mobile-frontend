@@ -39,4 +39,14 @@ class RemoteApiImpl implements RemoteApi{
     }
   }
 
+  @override
+  Future<void> clearCart() async {
+    try{
+      await _dio.delete('/cart/clear/');
+    }catch(e){
+      print("Error: $e");
+      throw Exception("Failed to clear cart");
+    }
+  }
+
 }

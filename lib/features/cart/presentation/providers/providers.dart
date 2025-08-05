@@ -4,6 +4,7 @@ import 'package:tech_store/features/cart/data/repositories/cart_repository_impl.
 import 'package:tech_store/features/cart/domain/entities/cart.dart';
 import 'package:tech_store/features/cart/domain/repository/cart_repository.dart';
 import 'package:tech_store/features/cart/domain/usecases/cart_update_use_case.dart';
+import 'package:tech_store/features/cart/domain/usecases/clear_cart_use_case.dart';
 import 'package:tech_store/features/cart/domain/usecases/delete_item_use_case.dart';
 import 'package:tech_store/features/cart/domain/usecases/get_cart_use_case.dart';
 import 'package:tech_store/features/cart/presentation/viewmodels/cart_update_view_model.dart';
@@ -23,10 +24,15 @@ final updateCartUseCaseProvider=Provider<CartUpdateUseCase>((ref){
 final deleteCartUseCaseProvider=Provider<DeleteItemUseCase>((ref){
   return DeleteItemUseCase(ref.watch(repositoryProvider));
 });
+final clearCartUseCaseProvider=Provider<ClearCartUseCase>((ref){
+  return ClearCartUseCase(ref.watch(repositoryProvider));
+});
 final cartViewModelProvider=StateNotifierProvider<CartViewModel,AsyncValue<Cart>>((ref)=>CartViewModel(
+  ref.watch(clearCartUseCaseProvider),
   ref.watch(cartUseCaseProvider),
   ref.watch(deleteCartUseCaseProvider),
-  ref
+  ref,
+
 ));
 
 final cartUpdateViewModelProvider=StateNotifierProvider<CartUpdateViewModel,AsyncValue<void>>((ref)=>CartUpdateViewModel(

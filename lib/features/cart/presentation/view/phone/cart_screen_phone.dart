@@ -6,6 +6,7 @@ import 'package:tech_store/features/cart/presentation/providers/providers.dart';
 import 'package:tech_store/features/cart/presentation/widgets/phone/cart_list_view.dart';
 import 'package:tech_store/features/cart/presentation/widgets/phone/infos_container.dart';
 import 'package:tech_store/shared/widgets/app_bar.dart';
+import 'package:tech_store/shared/widgets/help_and_support.dart';
 class CartScreenPhone extends ConsumerWidget {
   const CartScreenPhone({super.key});
 
@@ -21,24 +22,53 @@ class CartScreenPhone extends ConsumerWidget {
           drawer: DrawerCostume(),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15,right: 15,
-              top: 25,bottom: 25),
-              
-              child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Shopping Cart',style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600
-                  ),),
-                  SizedBox(height: 20,),
-                  InfosContainer(),
-                  SizedBox(height: 20,),
-                  CartListView(cart: cart,)
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15,right: 15,
+                  top: 25,bottom: 25),
 
-                ],
-              ),
+                  child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Shopping Cart',style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600
+                      ),),
+                      SizedBox(height: 20,),
+                      InfosContainer(),
+                      SizedBox(height: 20,),
+                      Column(
+                        children: [
+                          CartListView(cart: cart,),
+                          SizedBox(height: 20,),
+                          Visibility(
+                            visible: cart.items.isNotEmpty,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 15.0,right: 15),
+                              child: ElevatedButton(onPressed: (){
+                                ref.read(cartViewModelProvider.notifier).clearCart();
+                              },
+                                  style: ElevatedButton.styleFrom(
+                                      minimumSize: Size(double.infinity, 50),
+                                      backgroundColor: Colors.black
+
+                                  ), child:const Text('Clear Shopping Cart',style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color:Colors.white,
+                                  ),)
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+
+                    ],
+                  ),
+                ),
+                HelpAndSupport()
+              ],
             ),
           ),
         );

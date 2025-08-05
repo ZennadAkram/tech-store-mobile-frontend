@@ -23,5 +23,11 @@ class QuantityViewModel extends StateNotifier<Map<int, int>>{
 
   // Get quantity for specific item
   int getQuantity(int itemId) => state[itemId] ?? 0;
+  void removeItem(int itemId) {
+    final updatedState = {...state};
+    updatedState.remove(itemId);
+    state = updatedState;
+  }
+
 
 }

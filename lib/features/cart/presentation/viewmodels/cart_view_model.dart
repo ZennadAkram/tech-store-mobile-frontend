@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tech_store/features/cart/domain/entities/cart.dart';
+import 'package:tech_store/features/cart/domain/usecases/clear_cart_use_case.dart';
 import 'package:tech_store/features/cart/domain/usecases/delete_item_use_case.dart';
 import 'package:tech_store/features/cart/domain/usecases/get_cart_use_case.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class CartViewModel extends StateNotifier<AsyncValue<Cart>>{
   final Ref ref;
   double subTotals = 0;
   DeleteItemUseCase deleteItemUseCase;
+  ClearCartUseCase clearCartUseCase;
 
   final controllerState = TextEditingController();
   final controllerZipCode = TextEditingController();
@@ -22,7 +24,7 @@ class CartViewModel extends StateNotifier<AsyncValue<Cart>>{
     'Japan',
   ];
 
-  CartViewModel(this.cartUseCase, this.deleteItemUseCase, this.ref) : super(const AsyncLoading()) {
+  CartViewModel(this.clearCartUseCase,this.cartUseCase, this.deleteItemUseCase, this.ref) : super(const AsyncLoading()) {
   getCart();
 
 
@@ -54,18 +56,30 @@ class CartViewModel extends StateNotifier<AsyncValue<Cart>>{
     ref.read(subTotalProvider.notifier).state = subTotal;
   }
 
+  Future<void> clearCart() async {
+    try {
+      await clearCartUseCase();
+      carts.items.clear();
+      state = AsyncData(carts);
+      calculateSubTotal(null);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
+  }
 
   Future<void> deleteItem(int id) async {
-
-    try{
+    try {
       await deleteItemUseCase(id);
 
-      carts.items.removeWhere((element) => element.id == id); // mutate the internal list
+      carts.items.removeWhere((element) => element.id == id);
       state = AsyncData(carts);
 
-    }catch(e,st){
-      state = AsyncError(e,st);
+      // ✅ Recalculate subtotal using updated quantity map
+      final quantityMap = ref.read(quantityProvider);
+      calculateSubTotal(quantityMap);
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
-
   }
+
 }

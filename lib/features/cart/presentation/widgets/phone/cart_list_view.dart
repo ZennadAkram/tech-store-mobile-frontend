@@ -171,12 +171,17 @@ class CartListView extends ConsumerWidget {
                       ),
                       IconButton(
                           onPressed: (){
-                            viewModel.deleteItem(cart.items[index].id);
+                            final itemId = cart.items[index].id;
+
+                            // Remove item from cart
+                            viewModel.deleteItem(itemId);
+
+                            // ✅ Remove from QuantityViewModel
+                            ref.read(quantityProvider.notifier).removeItem(itemId);
+
+                            // Update cart count and subtotal
                             ref.read(appBarUserProvider).getCartCount();
-                            Future.microtask(() => viewModel.calculateSubTotal(ref.read(quantityProvider)));
-
-
-                          }, icon: Icon(Icons.highlight_remove_sharp,size: 30,color: AppColors.labelColor,))
+                            Future.microtask(() => viewModel.calculateSubTotal(ref.read(quantityProvider)));                          }, icon: Icon(Icons.highlight_remove_sharp,size: 30,color: AppColors.labelColor,))
                     ],
                   ),
                 )
