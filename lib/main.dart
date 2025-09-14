@@ -5,6 +5,8 @@ import 'package:tech_store/Core/network/private_dio.dart';
 import 'package:tech_store/Core/network/public_dio.dart';
 import 'package:tech_store/Core/network/token_storage.dart';
 import 'package:tech_store/features/cart/presentation/view/cart_screen.dart';
+import 'package:tech_store/features/chatbot/presentation/views/chat_screen.dart';
+import 'package:tech_store/features/chatbot/presentation/views/chatbot_screen.dart';
 import 'package:tech_store/features/checkout_address/presentation/views/mainscreen/checkout_address_screen.dart';
 
 
@@ -91,7 +93,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:CheckoutAddressScreen(),
+      home: const ChatbotScreen(),
     );
   }
 }
