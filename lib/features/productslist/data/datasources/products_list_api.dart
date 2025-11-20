@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:tech_store/core/network/public_dio.dart';
+
 import 'package:tech_store/features/productslist/data/models/brand_model.dart';
 import 'package:tech_store/features/productslist/data/models/category_count_model.dart';
 import 'package:tech_store/features/productslist/data/models/price_count_model.dart';
 import 'package:tech_store/features/productslist/data/models/product_model.dart';
+
+import '../../../../Core/network/public_dio.dart';
 
 class ProductService {
   final Dio _dio = PublicDio.dio;

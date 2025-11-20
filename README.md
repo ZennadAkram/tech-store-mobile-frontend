@@ -1,16 +1,67 @@
-# tech_store
+# E-Commerce Platform Frontend (Flutter + AI Chat)
 
-A new Flutter project.
+[![License: Private](https://img.shields.io/badge/License-Private-red.svg)](LICENSE)
 
-## Getting Started
+## Overview
+This repository contains the **Flutter mobile frontend** for a full-stack e-commerce platform.  
+It connects to a Django REST Framework backend with **AI-powered assistance** for customer support.
 
-This project is a starting point for a Flutter application.
+The Flutter app provides:
 
-A few resources to get you started if this is your first Flutter project:
+- Product browsing with filters, search, and sorting
+- Shopping cart management
+- Order placement and tracking
+- User authentication via JWT
+- Real-time AI chat powered by **SmolAgents + DeepSeek**
+- Responsive design for Android and iOS devices
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tech Stack
+
+- **Framework:** Flutter 3.6+
+- **State Management:** Riverpod / Hooks Riverpod
+- **HTTP Requests:** Dio
+- **Environment Variables:** flutter_dotenv
+- **Secure Storage:** flutter_secure_storage
+- **SVG & Icons:** flutter_svg, lucide_icons_flutter
+- **Caching Images:** cached_network_image
+- **WebSockets:** web_socket_channel
+- **Dependency Injection:** Provider
+- **UI Design:** Material Design
+- **Fonts:** Poppins (all weights + italics)
+
+---
+
+## Features
+
+### Users
+- Sign up, login, logout, and refresh JWT tokens
+- JWT-protected endpoints for personal actions
+- Profile retrieval and updates
+
+### Products
+- Browse and search products by keyword, category, brand, or price range
+- Sort by creation date, price, name, or rating
+- View product details with versions, colors, and images
+
+### Cart
+- Add, remove, and update cart items
+- Dynamic cart total and item count
+- Clear cart contents
+
+### Orders
+- Place orders from the cart
+- View order history and details
+- Track order status using AI chat integration
+
+### Reviews
+- Submit product reviews after purchase
+- View product reviews with ratings
+
+### AI Chat Widget
+- Ask questions about products, orders, or shipments
+- Uses **SmolAgents + DeepSeek** backend agent
+- Provides personalized responses using `user_id`
+- Handles errors gracefully and guides users if tools fail
+- Embedded FAQ knowledge: shipping, returns, orders, accounts, payments
