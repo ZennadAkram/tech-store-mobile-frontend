@@ -73,8 +73,13 @@ The Flutter app provides:
 
 ### Installation
 ```bash
-git clone [repository-url]
+git clone https://github.com/ZennadAkram/tech_store/
 flutter pub get
 cp .env.example .env
 # Add your configuration to .env
 flutter run
+
+## Environment Variables
+Create a `.env` file with:
+BASE_URL=backend_url
+
