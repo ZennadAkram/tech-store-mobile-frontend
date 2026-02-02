@@ -65,3 +65,16 @@ The Flutter app provides:
 - Provides personalized responses using `user_id`
 - Handles errors gracefully and guides users if tools fail
 - Embedded FAQ knowledge: shipping, returns, orders, accounts, payments
+
+### Prerequisites
+- Flutter 3.6+
+- Dart 3.0+
+- Backend server running (link to backend repo)
+
+### Installation
+```bash
+git clone [repository-url]
+flutter pub get
+cp .env.example .env
+# Add your configuration to .env
+flutter run
