@@ -188,13 +188,13 @@ class _ProductListScreenTabletState extends ConsumerState<ProductListScreenTable
                             onTap: (){
                               ref.read(listOrGridProvider.notifier).state=!gridOrList;
                             },
-                            child: !gridOrList ? SvgPicture.asset('assets/Icons/grid.svg'):SvgPicture.asset('assets/Icons/grid2.svg')),
+                            child: !gridOrList ? SvgPicture.asset('assets/icons/grid.svg'):SvgPicture.asset('assets/icons/grid2.svg')),
                         const SizedBox(width: 16),
                         InkWell(
                             onTap: (){
                               ref.read(listOrGridProvider.notifier).state=!gridOrList;
                             },
-                            child: !gridOrList ? SvgPicture.asset('assets/Icons/list.svg'):SvgPicture.asset('assets/Icons/list2.svg')),
+                            child: !gridOrList ? SvgPicture.asset('assets/icons/list.svg'):SvgPicture.asset('assets/icons/list2.svg')),
                       ],
                     ),
                   ],

@@ -39,7 +39,7 @@ class WebSocketService {
         print('🔑 Token found: ${token.substring(0, 20)}...');
       }
 
-      final url = 'ws://192.168.1.86:8000/ws/socket-server/?token=$token';
+      final url = 'ws://192.168.1.91:8000/ws/socket-server/?token=$token';
       if (kDebugMode) {
         print('🌐 Connecting to: $url');
       }
